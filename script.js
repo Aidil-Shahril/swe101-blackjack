@@ -1,4 +1,4 @@
-// The cards are displayed to the user.
+
 // The user decides whether to hit or stand, using the submit button to submit their choice.
 // The user's cards are analysed for winning or losing conditions.
 // The computer decides to hit or stand automatically based on game rules.
@@ -7,7 +7,7 @@
 var makeDeck = function () {
   // creating an array of cards
   var cardDeck = [];
-  var suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+  var suits = ['❤️', '💎', '☘️', '♠'];
 
   var suitIndex = 0;
   while (suitIndex < suits.length) {
@@ -82,6 +82,7 @@ var shuffleCards = function (cardDeck) {
 
 var deck = makeDeck();
 var shuffledDeck = shuffleCards(deck);
+var myOutputValue = '';
 
 var main = function (input) {
   // 2. User clicks Submit to deal 2 cards to player and computer.
@@ -92,36 +93,47 @@ var main = function (input) {
   var playerSecondCard = shuffledDeck.pop();
   var computerSecondCard = shuffledDeck.pop();
 
-  // The cards are analysed for game winning conditions, e.g. Blackjack.
-
   var playerHandSum = playerFirstCard.cardValue + playerSecondCard.cardValue;
   console.log(playerHandSum);
 
   var computerHandSum = computerFirstCard.cardValue + computerSecondCard.cardValue;
   console.log(computerHandSum);
-
-  if (playerHandSum == 21) {
-
-  }
-
-  // Initialise an output value with the cards drawn by each player.
-  var myOutputValue = 'PLAYER: '
+ // 3. The cards are analysed for game winning conditions, e.g. Blackjack.
+ if (playerHandSum == 21) {
+myOutputValue = 'Player got blackjack! <br><br>PLAYER: '
     + playerFirstCard.name
-    + ' of '
     + playerFirstCard.suit
-    + ' and '
+    + ' & '
     + playerSecondCard.name
-    + ' of '
     + playerSecondCard.suit
-    + '<br>COMPUTER: '
+    + '. <br>Player total is currently: ' +playerHandSum
+    + '<br><br>COMPUTER: '
     + computerFirstCard.name
-    + ' of '
     + computerFirstCard.suit
-    + ' and '
+    + ' & '
     + computerSecondCard.name
-    + ' of '
     + computerSecondCard.suit
+    + '. <br>Computer total is currently: ' +computerHandSum
+    + '<br>'; 
+  } else 
+// 4. The cards are displayed to the user.
+
+myOutputValue = 'PLAYER: '
+    + playerFirstCard.name
+    + playerFirstCard.suit
+    + ' & '
+    + playerSecondCard.name
+    + playerSecondCard.suit
+    + '. <br>Player total is currently: ' +playerHandSum
+    + '<br><br>COMPUTER: '
+    + computerFirstCard.name
+    + computerFirstCard.suit
+    + ' & '
+    + computerSecondCard.name
+    + computerSecondCard.suit
+    + '. <br>Computer total is currently: ' +computerHandSum
     + '<br>';
+
 
   return myOutputValue;
 };
