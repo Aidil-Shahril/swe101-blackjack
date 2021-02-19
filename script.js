@@ -1,5 +1,4 @@
 
-// The user decides whether to hit or stand, using the submit button to submit their choice.
 // The user's cards are analysed for winning or losing conditions.
 // The computer decides to hit or stand automatically based on game rules.
 // The game either ends or continues.
@@ -59,8 +58,6 @@ var getRandomIndex = function (max) {
   return Math.floor(Math.random() * max);
 };
 
-// 1.Deck is shuffled.
-
 var shuffleCards = function (cardDeck) {
   // Loop over the card deck array once
   var currentIndex = 0;
@@ -80,26 +77,8 @@ var shuffleCards = function (cardDeck) {
   return cardDeck;
 };
 
-var deck = makeDeck();
-var shuffledDeck = shuffleCards(deck);
-var myOutputValue = '';
-
-var main = function (input) {
-  // 2. User clicks Submit to deal 2 cards to player and computer.
-  // cards are drawn from the top of the deck
-  var playerFirstCard = shuffledDeck.pop();
-  var computerFirstCard = shuffledDeck.pop();
-
-  var playerSecondCard = shuffledDeck.pop();
-  var computerSecondCard = shuffledDeck.pop();
-
-  var playerHandSum = playerFirstCard.cardValue + playerSecondCard.cardValue;
-  console.log(playerHandSum);
-
-  var computerHandSum = computerFirstCard.cardValue + computerSecondCard.cardValue;
-  console.log(computerHandSum);
- // 3. The cards are analysed for game winning conditions, e.g. Blackjack.
- if (playerHandSum == 21) {
+var winConditions = function (){
+if (playerHandSum == 21) {
 myOutputValue = 'Player got blackjack! <br><br>PLAYER: '
     + playerFirstCard.name
     + playerFirstCard.suit
@@ -116,7 +95,6 @@ myOutputValue = 'Player got blackjack! <br><br>PLAYER: '
     + '. <br>Computer total is currently: ' +computerHandSum
     + '<br>'; 
   } else 
-// 4. The cards are displayed to the user.
 
 myOutputValue = 'PLAYER: '
     + playerFirstCard.name
@@ -133,7 +111,39 @@ myOutputValue = 'PLAYER: '
     + computerSecondCard.suit
     + '. <br>Computer total is currently: ' +computerHandSum
     + '<br>';
+return myOutputValue;
+};
 
+var deck = makeDeck();
+// 1.Deck is shuffled.
+var shuffledDeck = shuffleCards(deck);
+var myOutputValue = '';
+var playerFirstCard;
+var playerSecondCard;
+var computerFirstCard;
+var computerSecondCard;
+var playerHandSum;
+var computerHandSum;
+
+var main = function (input) {
+  // 2. User clicks Submit to deal 2 cards to player and computer.
+  // cards are drawn from the top of the deck
+  playerFirstCard = shuffledDeck.pop();
+  computerFirstCard = shuffledDeck.pop();
+
+  playerSecondCard = shuffledDeck.pop();
+  computerSecondCard = shuffledDeck.pop();
+
+  playerHandSum = playerFirstCard.cardValue + playerSecondCard.cardValue;
+  console.log(playerHandSum);
+
+  computerHandSum = computerFirstCard.cardValue + computerSecondCard.cardValue;
+  console.log(computerHandSum);
+ // 3. The cards are analysed for game winning conditions, e.g. Blackjack.
+ gameConditions(playerHandSum, computerHandSum);
+ // 4. The cards are displayed to the user.
+ 
+    // The user decides whether to hit or stand, using the submit button to submit their choice.
 
   return myOutputValue;
 };
