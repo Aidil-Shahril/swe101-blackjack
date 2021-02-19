@@ -1,8 +1,3 @@
-
-// The user's cards are analysed for winning or losing conditions.
-// The computer decides to hit or stand automatically based on game rules.
-// The game either ends or continues.
-
 var makeDeck = function () {
   // creating an array of cards
   var cardDeck = [];
@@ -77,73 +72,60 @@ var shuffleCards = function (cardDeck) {
   return cardDeck;
 };
 
-var winConditions = function (){
-if (playerHandSum == 21) {
-myOutputValue = 'Player got blackjack! <br><br>PLAYER: '
-    + playerFirstCard.name
-    + playerFirstCard.suit
-    + ' & '
-    + playerSecondCard.name
-    + playerSecondCard.suit
-    + '. <br>Player total is currently: ' +playerHandSum
-    + '<br><br>COMPUTER: '
-    + computerFirstCard.name
-    + computerFirstCard.suit
-    + ' & '
-    + computerSecondCard.name
-    + computerSecondCard.suit
-    + '. <br>Computer total is currently: ' +computerHandSum
-    + '<br>'; 
-  } else 
-
-myOutputValue = 'PLAYER: '
-    + playerFirstCard.name
-    + playerFirstCard.suit
-    + ' & '
-    + playerSecondCard.name
-    + playerSecondCard.suit
-    + '. <br>Player total is currently: ' +playerHandSum
-    + '<br><br>COMPUTER: '
-    + computerFirstCard.name
-    + computerFirstCard.suit
-    + ' & '
-    + computerSecondCard.name
-    + computerSecondCard.suit
-    + '. <br>Computer total is currently: ' +computerHandSum
-    + '<br>';
-return myOutputValue;
-};
-
 var deck = makeDeck();
 // 1.Deck is shuffled.
 var shuffledDeck = shuffleCards(deck);
-var myOutputValue = '';
-var playerFirstCard;
-var playerSecondCard;
-var computerFirstCard;
-var computerSecondCard;
-var playerHandSum;
-var computerHandSum;
+var playerHand = [];
+var computerHand = [];
+var playerHandSum = 0;
+var computerHandSum = 0;
+
+var startRound = function () {
+  for (var i = 0; i <= 1; i += 1) {
+    // cards are drawn from the top of the deck
+    playerHand.push(shuffledDeck.pop());
+    computerHand.push(shuffledDeck.pop());
+
+    playerHandSum = playerHandSum + playerHand[i].cardValue;
+    computerHandSum = computerHandSum + computerHand[i].cardValue;
+  }
+};
+
+// var winConditions = function (handSum) {
+// if (playerHandSum == 21 && playerHand.length == 2){
+
+// }
+// };
+
+var outputDisplay = function (CardsInHand, handSum) {
+  var counter = 0;
+  var handOutput = '';
+
+  while (counter < CardsInHand.length) {
+    handOutput = handOutput + '<br>'
+    + CardsInHand[counter].name
+    + CardsInHand[counter].suit;
+    counter += 1;
+  }
+  return handOutput + '<br> Hand total is: ' + handSum;
+};
 
 var main = function (input) {
+  var myOutputValue;
   // 2. User clicks Submit to deal 2 cards to player and computer.
-  // cards are drawn from the top of the deck
-  playerFirstCard = shuffledDeck.pop();
-  computerFirstCard = shuffledDeck.pop();
+  startRound();
 
-  playerSecondCard = shuffledDeck.pop();
-  computerSecondCard = shuffledDeck.pop();
+  // 3. The cards are analysed for game winning conditions, e.g. Blackjack.
 
-  playerHandSum = playerFirstCard.cardValue + playerSecondCard.cardValue;
-  console.log(playerHandSum);
+  // 4. The cards are displayed to the user.
+  var myHandOutput = outputDisplay(playerHand, playerHandSum);
+  var computerHandOutput = outputDisplay(computerHand, computerHandSum);
 
-  computerHandSum = computerFirstCard.cardValue + computerSecondCard.cardValue;
-  console.log(computerHandSum);
- // 3. The cards are analysed for game winning conditions, e.g. Blackjack.
- gameConditions(playerHandSum, computerHandSum);
- // 4. The cards are displayed to the user.
- 
-    // The user decides whether to hit or stand, using the submit button to submit their choice.
+  myOutputValue = 'Your hand is: ' + myHandOutput + '<br><br>Computer hand is: ' + computerHandOutput;
+  // The user decides whether to hit or stand, using the submit button to submit their choice.
 
+  // The user's cards are analysed for winning or losing conditions.
+  // The computer decides to hit or stand automatically based on game rules.
+  // The game either ends or continues.
   return myOutputValue;
 };
