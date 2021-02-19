@@ -79,8 +79,9 @@ var playerHand = [];
 var computerHand = [];
 var playerHandSum = 0;
 var computerHandSum = 0;
+// var mode = '2 cards';
 
-var startRound = function () {
+var dealStartingCards = function () {
   for (var i = 0; i <= 1; i += 1) {
     // cards are drawn from the top of the deck
     playerHand.push(shuffledDeck.pop());
@@ -91,39 +92,43 @@ var startRound = function () {
   }
 };
 
-// var winConditions = function (handSum) {
-// if (playerHandSum == 21 && playerHand.length == 2){
-
-// }
-// };
-
-var outputDisplay = function (CardsInHand, handSum) {
-  var counter = 0;
+var displayCardsInHand = function (cardsInHand, handSum) {
   var handOutput = '';
+  var counter = 0;
 
-  while (counter < CardsInHand.length) {
+  while (counter < cardsInHand.length) {
     handOutput = handOutput + '<br>'
-    + CardsInHand[counter].name
-    + CardsInHand[counter].suit;
+    + cardsInHand[counter].name
+    + cardsInHand[counter].suit;
     counter += 1;
   }
   return handOutput + '<br> Hand total is: ' + handSum;
 };
 
+var checkWinCondition = function () {
+  var winningOutput = '';
+
+  if ((playerHand[0].name == 'ace' && playerHand[1].cardValue == 10) || (playerHand[1].name == 'ace' && playerHand[0].cardValue == 10)) {
+    winningOutput = 'Congratulations! You got Blackjack! <br><br>';
+  }
+
+  return winningOutput;
+};
+
 var main = function (input) {
   var myOutputValue;
   // 2. User clicks Submit to deal 2 cards to player and computer.
-  startRound();
+  dealStartingCards();
 
   // 3. The cards are analysed for game winning conditions, e.g. Blackjack.
-
+  var winDisplay = checkWinCondition();
   // 4. The cards are displayed to the user.
-  var myHandOutput = outputDisplay(playerHand, playerHandSum);
-  var computerHandOutput = outputDisplay(computerHand, computerHandSum);
+  var playerFinalOutput = 'Your hand is: ' + displayCardsInHand(playerHand, playerHandSum);
+  var computerFinalOutput = 'Computer hand is: ' + displayCardsInHand(computerHand, computerHandSum);
 
-  myOutputValue = 'Your hand is: ' + myHandOutput + '<br><br>Computer hand is: ' + computerHandOutput;
+  myOutputValue = winDisplay + playerFinalOutput + '<br><br>' + computerFinalOutput;
   // The user decides whether to hit or stand, using the submit button to submit their choice.
-
+  // if (playerHandSum < 17)
   // The user's cards are analysed for winning or losing conditions.
   // The computer decides to hit or stand automatically based on game rules.
   // The game either ends or continues.
