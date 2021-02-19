@@ -5,6 +5,7 @@
 // The game either ends or continues.
 
 var makeDeck = function () {
+  // creating an array of cards
   var cardDeck = [];
   var suits = ['hearts', 'diamonds', 'clubs', 'spades'];
 
