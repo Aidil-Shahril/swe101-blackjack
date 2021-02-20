@@ -79,8 +79,9 @@ var playerHand = [];
 var computerHand = [];
 var playerHandSum = 0;
 var computerHandSum = 0;
-var mode = 'deal phase';
+var mode = 'start phase';
 var playerInput = '';
+var roundRestart = false;
 
 var dealStartingCards = function () {
   for (var i = 0; i <= 1; i += 1) {
@@ -111,26 +112,48 @@ var checkWinCondition = function () {
 
   if ((playerHand[0].name == 'ace' && playerHand[1].cardValue == 10) || (playerHand[1].name == 'ace' && playerHand[0].cardValue == 10)) {
     winningOutput = 'Congratulations! You got Blackjack! <br><br>';
-  } else if (playerHandSum > 21) {
-    winningOutput = 'You went bust! Banker wins the round. <br><br>';
+    roundRestart = true;
+  } else if (playerHandSum > 21 || (playerInput == 'stay' && (playerHandSum < computerHandSum))) {
+    winningOutput = 'You went bust! Banker wins the round. <br><br> Click submit to restart the game.<br><br>';
+    roundRestart = true;
   } else if (playerInput == 'stay') {
     if (playerHandSum > computerHandSum) {
-      winningOutput = 'Congratulations! you won the round. <br><br>';
+      winningOutput = 'Congratulations! you won the round. <br><br> Click submit to restart the game.<br><br>';
+      roundRestart = true;
     }
-  } else
-  {
+  } else {
     winningOutput = 'Would you like to hit or stay? <br><br>';
   }
 
   return winningOutput;
 };
 
+var manageGamePhase = function () {
+  if (mode == 'start phase') {
+    mode = 'deal phase';
+  } else if (mode == 'deal phase') {
+    mode = 'hit or stay';
+  } else if (mode == 'hit or stay') {
+    if (roundRestart == true) {
+      mode = 'start phase';
+      console.log('round restart');
+      playerHand = [];
+      computerHand = [];
+      playerHandSum = 0;
+      computerHandSum = 0;
+      playerInput = '';
+      roundRestart = false;
+    } else mode = 'hit or stay';
+  }
+};
+
 var main = function (input) {
-  var myOutputValue;
+  var myOutputValue = 'click submit to start new round';
   var winDisplay;
   var playerFinalOutput;
   var computerFinalOutput;
 
+  manageGamePhase();
   // 2. User clicks Submit to deal 2 cards to player and computer.
   if (mode == 'deal phase') {
     dealStartingCards();
@@ -142,7 +165,6 @@ var main = function (input) {
 
     myOutputValue = winDisplay + playerFinalOutput + '<br><br>' + computerFinalOutput;
   }
-
   // 5. The user decides whether to hit or stand, using the submit button to submit their choice.
   if (input == 'hit' && mode == 'hit or stay') {
     playerHand.push(shuffledDeck.pop());
@@ -162,7 +184,6 @@ var main = function (input) {
 
     myOutputValue = winDisplay + playerFinalOutput + '<br><br>' + computerFinalOutput;
   }
-  mode = 'hit or stay';
 
   // The computer decides to hit or stand automatically based on game rules.
   // The game either ends or continues.
