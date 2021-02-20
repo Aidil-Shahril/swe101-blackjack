@@ -173,6 +173,8 @@ var managePlayerChoices = function () {
     computerFinalOutput = 'Computer hand is: ' + displayCardsInHand(computerHand, computerHandSum);
 
     myOutputValue = winDisplay + playerFinalOutput + '<br><br>' + computerFinalOutput;
+  } else if ((playerInput != 'hit' && mode == 'hit or stay') || (playerInput != 'stay' && mode == 'hit or stay')) {
+    myOutputValue = 'Please type hit or stay. <br><br>' + playerFinalOutput + '<br><br>' + computerFinalOutput;
   }
 };
 
