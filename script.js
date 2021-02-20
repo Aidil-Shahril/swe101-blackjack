@@ -79,7 +79,8 @@ var playerHand = [];
 var computerHand = [];
 var playerHandSum = 0;
 var computerHandSum = 0;
-// var mode = '2 cards';
+var mode = 'deal phase';
+var playerInput = '';
 
 var dealStartingCards = function () {
   for (var i = 0; i <= 1; i += 1) {
@@ -110,6 +111,15 @@ var checkWinCondition = function () {
 
   if ((playerHand[0].name == 'ace' && playerHand[1].cardValue == 10) || (playerHand[1].name == 'ace' && playerHand[0].cardValue == 10)) {
     winningOutput = 'Congratulations! You got Blackjack! <br><br>';
+  } else if (playerHandSum > 21) {
+    winningOutput = 'You went bust! Banker wins the round. <br><br>';
+  } else if (playerInput == 'stay') {
+    if (playerHandSum > computerHandSum) {
+      winningOutput = 'Congratulations! you won the round. <br><br>';
+    }
+  } else
+  {
+    winningOutput = 'Would you like to hit or stay? <br><br>';
   }
 
   return winningOutput;
@@ -117,19 +127,43 @@ var checkWinCondition = function () {
 
 var main = function (input) {
   var myOutputValue;
+  var winDisplay;
+  var playerFinalOutput;
+  var computerFinalOutput;
+
   // 2. User clicks Submit to deal 2 cards to player and computer.
-  dealStartingCards();
+  if (mode == 'deal phase') {
+    dealStartingCards();
+    // 3. The cards are analysed for game winning conditions, e.g. Blackjack.
+    winDisplay = checkWinCondition();
+    // 4. The cards are displayed to the user.
+    playerFinalOutput = 'Your hand is: ' + displayCardsInHand(playerHand, playerHandSum);
+    computerFinalOutput = 'Computer hand is: ' + displayCardsInHand(computerHand, computerHandSum);
 
-  // 3. The cards are analysed for game winning conditions, e.g. Blackjack.
-  var winDisplay = checkWinCondition();
-  // 4. The cards are displayed to the user.
-  var playerFinalOutput = 'Your hand is: ' + displayCardsInHand(playerHand, playerHandSum);
-  var computerFinalOutput = 'Computer hand is: ' + displayCardsInHand(computerHand, computerHandSum);
+    myOutputValue = winDisplay + playerFinalOutput + '<br><br>' + computerFinalOutput;
+  }
 
-  myOutputValue = winDisplay + playerFinalOutput + '<br><br>' + computerFinalOutput;
-  // The user decides whether to hit or stand, using the submit button to submit their choice.
-  // if (playerHandSum < 17)
-  // The user's cards are analysed for winning or losing conditions.
+  // 5. The user decides whether to hit or stand, using the submit button to submit their choice.
+  if (input == 'hit' && mode == 'hit or stay') {
+    playerHand.push(shuffledDeck.pop());
+    console.log(playerHand);
+    playerHandSum = playerHandSum + playerHand[playerHand.length - 1].cardValue;
+    // The user's cards are analysed for winning or losing conditions.
+    winDisplay = checkWinCondition();
+    playerFinalOutput = 'Your hand is: ' + displayCardsInHand(playerHand, playerHandSum);
+    computerFinalOutput = 'Computer hand is: ' + displayCardsInHand(computerHand, computerHandSum);
+
+    myOutputValue = winDisplay + playerFinalOutput + '<br><br>' + computerFinalOutput;
+  } else if (input == 'stay' && mode == 'hit or stay') {
+    playerInput = 'stay';
+    winDisplay = checkWinCondition();
+    playerFinalOutput = 'Your hand is: ' + displayCardsInHand(playerHand, playerHandSum);
+    computerFinalOutput = 'Computer hand is: ' + displayCardsInHand(computerHand, computerHandSum);
+
+    myOutputValue = winDisplay + playerFinalOutput + '<br><br>' + computerFinalOutput;
+  }
+  mode = 'hit or stay';
+
   // The computer decides to hit or stand automatically based on game rules.
   // The game either ends or continues.
   return myOutputValue;
