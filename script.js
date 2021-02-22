@@ -116,7 +116,7 @@ var checkWinCondition = function () {
   var winningOutput = '';
 
   if ((playerHand[0].name == 'ace' && playerHand[1].cardValue == 10) || (playerHand[1].name == 'ace' && playerHand[0].cardValue == 10)) {
-    winningOutput = 'Congratulations! You got Blackjack! <br><br>';
+    winningOutput = 'Congratulations! You got Blackjack! <br><br> Click submit to reset the game.<br><br>';
     roundRestart = true;
   } else if (playerHandSum > 21 || (playerInput == 'stay' && (playerHandSum < computerHandSum))) {
     winningOutput = 'You went bust! Banker wins the round. <br><br> Click submit to reset the game.<br><br>';
@@ -129,7 +129,11 @@ var checkWinCondition = function () {
   } else if (computerHandSum > 21 && mode == 'hit or stay') {
     winningOutput = 'Banker went bust! you win the round. <br><br> Click submit to reset the game.<br><br>';
     roundRestart = true;
-  } else {
+  } else if ((playerHandSum == computerHandSum) && (playerHandSum <= 21) && (computerHandSum <= 21)) {
+    winningOutput = 'Game is a tie! nobody wins this round. <br><br> Click submit to reset the game.<br><br>';
+    roundRestart = true;
+  }
+  else {
     winningOutput = 'Would you like to hit or stay? <br><br>';
   }
 
@@ -158,7 +162,6 @@ var manageGamePhase = function () {
 var managePlayerChoices = function () {
   if (playerInput == 'hit' && mode == 'hit or stay') {
     playerHand.push(shuffledDeck.pop());
-    console.log(playerHand);
     playerHandSum = playerHandSum + playerHand[playerHand.length - 1].cardValue;
     // The user's cards are analysed for winning or losing conditions.
     winDisplay = checkWinCondition();
@@ -181,7 +184,6 @@ var managePlayerChoices = function () {
 var manageComputerChoices = function () {
   if (computerHandSum < 17 && mode == 'hit or stay') {
     computerHand.push(shuffledDeck.pop());
-    console.log(computerHand);
     computerHandSum = computerHandSum + computerHand[computerHand.length - 1].cardValue;
   }
 };
@@ -205,6 +207,12 @@ var main = function (input) {
   playerInput = input;
   managePlayerChoices();
 
+  if (roundRestart == true) {
+    deck = makeDeck();
+    // when game restarts, deck is reshuffled.
+    shuffledDeck = shuffleCards(deck);
+  }
+  console.log(deck.length);
   // 7. The game either ends or continues.
   return myOutputValue;
 };
